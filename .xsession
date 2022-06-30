@@ -1,0 +1,2 @@
+./.xrandr
+exec i3

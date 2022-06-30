@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# get info from xrandr
+connectedOutputs=$(xrandr | awk '$2 == "connected"{print $1}')
+activeOutput=$(xrandr | grep -E " connected (primary )?[1-9]+" | sed -e "s/\([A-Z0-9]\+\) connected.*/\1/")
+
+prev=""
+default="eDP1"
+
+for display in $connectedOutputs
+do
+	if [ "$display" = "$default" ]; then
+		xrandr --output $display --auto --primary
+	else
+		xrandr --output $display --off
+		xrandr --output $display --auto --right-of "$prev" --auto
+	fi 
+	
+	prev=$display
+
+done
